@@ -13,6 +13,10 @@ test("has no sub path from src", () => {
   expect(parsePaths("src")).toEqual([])
 })
 
+test("with heading '/' ", () => {
+  expect(parsePaths("/src/aa")).toEqual(["aa"])
+})
+
 test("when no 'src' in dir, throw errors ", () => {
   expect(()=>{
     parsePaths("a/b/c")

@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import State from '../src/state';
+import {State} from '../src/state';
 
 let basicState = {
   dir: "src/user",
@@ -168,6 +168,23 @@ describe("plugins", () => {
   
   let state
   
+  test("can access paths & prefix from plugins", () => {
+    
+    let paths,prefix
+    
+    state = State({
+      ...basicState,
+      plugins:[
+        function capturePathsAndPrefix(stateConfig){
+          paths = stateConfig.paths
+          prefix = stateConfig.prefix
+        }
+      ]
+    })
+  
+    expect(paths).toEqual(["user"])
+    expect(prefix).toEqual("user")
+  })
   
   test("update state Config", () => {
   

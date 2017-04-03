@@ -3,22 +3,37 @@
  */
 'use strict'
 
-import {addAction, addEffect} from './action';
-import {dispatch} from './config';
-import parsePaths from './path';
+import {addLocalActions} from './global'
+import {dispatch} from './config'
+import parsePaths from './path'
 
 
-function State(options) {
+function globalActionName(prefix, localName) {
+  if (prefix === "") {
+    return localName
+  }
+  else {
+    return `${prefix}/${localName}`
+  }
+}
+
+
+export let State = (options) => {
   options.actions = options.actions || {}
   options.effects = options.effects || {}
-  
-  // TODO: workaround for unittest, will use mock for jest in the future
-  let _dispatch = options.__dispatch__ || dispatch
   
   // check if options is valid
   if (!options.dir || typeof options.dir !== 'string') {
     throw new Error(`a string 'dir' is required for a state`)
   }
+  
+  // create paths and prefix, add them to options, so plugins can use them
+  let paths = options.paths = parsePaths(options.dir)
+  let action_prefix = options.prefix = paths.join("/")
+  
+  
+  // TODO: workaround for unittest, will use mock for jest in the future
+  let _dispatch = options.__dispatch__ || dispatch
   
   let initialState = options.initial
   
@@ -36,18 +51,16 @@ function State(options) {
     }
   }
   
-  // create action creator & dispatcher
-  let paths = parsePaths(options.dir)
-  let action_prefix = paths.join("/")
+  
   
   let localActions = options.actions
-  let globalActions = Object.keys(localActions).reduce((_globalActions,localName)=>{
-    _globalActions[`${action_prefix}/${localName}`] = localActions[localName]
+  let globalActions = Object.keys(localActions).reduce((_globalActions, localName) => {
+    _globalActions[globalActionName(action_prefix,localName)] = localActions[localName]
     return _globalActions
-  },{})
+  }, {})
   
   // create action reducer
-  let actionReducer = function (state, action) {
+  let actionReducers = function (state, action) {
     let {type, payload, error, meta} = action
     let reducer = globalActions[type]
     if (reducer !== undefined) {
@@ -61,7 +74,6 @@ function State(options) {
   // local action creator which will bind to all effect methods
   let actionDispatchers = {}
   
- 
   
   for (let localName in localActions) {
     let actionType = `${action_prefix}/${localName}`
@@ -85,18 +97,16 @@ function State(options) {
     // add to local dispatcher (consume by effect)
     actionDispatchers[localName] = actionDispatcher
     
-    // add to global actions
-    addAction(paths, actionType, actionDispatcher)
     
     // add to reducer (to let other module access them easily)
-    actionReducer[localName] = actionDispatcher
+    actionReducers[localName] = actionDispatcher
   }
   
   
   // create effects creator & dispatcher
   let finalEffects = options.effects
   for (let localName in finalEffects) {
-    let actionType = `${action_prefix}/${localName}`
+    let actionType = globalActionName(action_prefix,localName)
     // let actionCreator = function (payload, error, meta) {
     //   return {
     //     type: actionType,
@@ -117,34 +127,34 @@ function State(options) {
     }
     
     // we wrap the call to finalEffects as a promise (you return promise from effect)
-    let effectFn = (payload,error,meta)=>{
+    let effectFn = (payload, error, meta) => {
       // actionDispatcher(payload,error,meta)
-      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload,error,meta))
+      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, error, meta))
     }
     
     // add to local dispatcher
     actionDispatchers[localName] = effectFn
     
     // add to reducer for other module to access
-    actionReducer[localName] = effectFn
-    
-    // add to global actions, effectFn will bind 'this' to local actionDispatchers
-    addEffect(paths,actionType, effectFn)
-    
+    actionReducers[localName] = effectFn
     
   }
   
-  
   // compose the final result
+  actionReducers.$prefix = action_prefix
+  actionReducers.$paths = paths
+  actionReducers.$initialState = initialState
   
-  actionReducer.$paths = paths
-  actionReducer.$initialState = initialState
+  // add to global actions
+  addLocalActions(actionDispatchers, actionReducers)
   
-  return actionReducer
+ 
+  
+  return actionReducers
   
 }
 
-export default State
+
 
 
 

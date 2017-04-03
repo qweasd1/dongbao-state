@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import State from '../src/state';
+import {State} from '../src/state';
 import {Config} from '../src/config';
 import {createStore} from 'redux';
 
