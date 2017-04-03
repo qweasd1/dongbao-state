@@ -2,8 +2,8 @@
  * Created by tony on 4/3/17.
  */
 'use strict'
-export * from './utils'
-export * from './config'
-export * from './combineStateReducer'
-export * from './state'
+export {createDirSelector,deepget,deepset} from './utils'
+export {Config,dispatch,getState} from './config'
+export {combineStateReduer} from './combineStateReducer'
+export {State} from './state'
 export {Actions, States, initState, CreateRootReducer} from './global'
