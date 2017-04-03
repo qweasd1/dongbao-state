@@ -36,12 +36,20 @@ function State(options) {
     }
   }
   
-  let finalActions = options.actions
+  // create action creator & dispatcher
+  let paths = parsePaths(options.dir)
+  let action_prefix = paths.join("/")
+  
+  let localActions = options.actions
+  let globalActions = Object.keys(localActions).reduce((_globalActions,localName)=>{
+    _globalActions[`${action_prefix}/${localName}`] = localActions[localName]
+    return _globalActions
+  },{})
   
   // create action reducer
   let actionReducer = function (state, action) {
     let {type, payload, error, meta} = action
-    let reducer = finalActions[type]
+    let reducer = globalActions[type]
     if (reducer !== undefined) {
       return reducer(state, payload, error, meta)
     }
@@ -53,11 +61,9 @@ function State(options) {
   // local action creator which will bind to all effect methods
   let actionDispatchers = {}
   
-  // create action creator & dispatcher
-  let paths = parsePaths(options.dir)
-  let action_prefix = paths.join("/")
+ 
   
-  for (let localName in finalActions) {
+  for (let localName in localActions) {
     let actionType = `${action_prefix}/${localName}`
     let actionCreator = function (payload, error, meta) {
       return {

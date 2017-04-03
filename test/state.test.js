@@ -210,3 +210,21 @@ describe("plugins", () => {
   })
 })
 
+describe("reducer",()=>{
+  let state
+  beforeAll(()=>{
+    state = State({
+      ...basicState
+    })
+  })
+  
+  test("call reducer", () => {
+    let newState = state({name:"old"},{
+      type:"user/changeName",
+      payload:"newName"
+    })
+  
+    expect(newState).toEqual({name: "newName"})
+  })
+})
+
