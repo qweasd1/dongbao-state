@@ -169,7 +169,7 @@ describe("plugins", () => {
   let state
   
   
-  test("update state config", () => {
+  test("update state Config", () => {
   
     state = State({
       ...basicState,
@@ -185,7 +185,7 @@ describe("plugins", () => {
     expect(state.endFetch).toBeInstanceOf(Function)
   })
   
-  test("replace state config", () => {
+  test("replace state Config", () => {
   
     state = State({
       ...basicState,

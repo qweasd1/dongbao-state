@@ -16,16 +16,8 @@ export let getState = (...args) => {
   return resolvedGetState(...args)
 }
 
-export default function createMiddleware (options) {
-  return (stateUtils) => {
-    resolvedDispatch = stateUtils.dispatch
-    resolvedGetState = stateUtils.getState
-    return (next) => {
-      return action => {
-        const result = next(action)
-        return result
-      }
-    }
-  }
+export let Config = (store) => {
+  resolvedDispatch = store.dispatch
+  resolvedGetState = store.getState
 }
 

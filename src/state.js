@@ -4,7 +4,7 @@
 'use strict'
 
 import {addAction, addEffect} from './action';
-import {dispatch} from './middleware';
+import {dispatch} from './config';
 import parsePaths from './path';
 
 
@@ -13,7 +13,7 @@ function State(options) {
   options.effects = options.effects || {}
   
   // TODO: workaround for unittest, will use mock for jest in the future
-  let dispatch = options.__dispatch__ || dispatch
+  let _dispatch = options.__dispatch__ || dispatch
   
   // check if options is valid
   if (!options.dir || typeof options.dir !== 'string') {
@@ -75,7 +75,7 @@ function State(options) {
     }
     
     let actionDispatcher = function (payload, error, meta) {
-      dispatch(actionCreator(payload, error, meta))
+      _dispatch(actionCreator(payload, error, meta))
     }
     
     if (localName in actionDispatchers) {
@@ -107,7 +107,7 @@ function State(options) {
     // }
     //
     // let actionDispatcher = function (payload, error, meta) {
-    //   dispatch(actionCreator(payload, error, meta))
+    //   _dispatch(actionCreator(payload, error, meta))
     // }
     //
     
