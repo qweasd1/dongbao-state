@@ -2,7 +2,7 @@
   "name": "dongbao-state",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest",
     "build": "rm -rf lib && babel src -d lib --no-comments"
