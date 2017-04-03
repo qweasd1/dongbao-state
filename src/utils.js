@@ -2,6 +2,8 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
+import parsePaths from './path'
+
 
 /**
  * deep get property of obj for given paths
@@ -53,4 +55,16 @@ export function deepset(obj, paths, value) {
     }
   }
   return _obj[paths[i]] = value
+}
+
+/**
+ * create selector of state from dir, will be used when binding state to react Component
+ * @param dir {string}
+ * @return {function(*)}
+ */
+export function createDirSelector(dir) {
+  let paths = parsePaths(dir)
+  return (state)=>{
+    return deepget(state,paths)
+  }
 }

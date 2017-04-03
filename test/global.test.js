@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import {Actions, initState, States} from '../src/global';
+import {Actions, initState, States, CreateRootReducer, Reset} from '../src/global';
 import {State} from '../src/state';
 
 
@@ -42,6 +42,7 @@ describe("Actions", () => {
   
   let state
   beforeAll(() => {
+    Reset()
     state = State({
       ...basicState
     })
@@ -60,18 +61,22 @@ describe("Actions", () => {
 
 describe("initState", () => {
   
-  State({
-    dir: "src",
-    initial: {
-      root: "root"
-    }
-  })
+  beforeAll(()=>{
+    Reset()
   
-  State({
-    dir: "src/user",
-    initial: {
-      name: "tony"
-    }
+    State({
+      dir: "src",
+      initial: {
+        root: "root"
+      }
+    })
+  
+    State({
+      dir: "src/user",
+      initial: {
+        name: "tony"
+      }
+    })
   })
   
   test("test initState", () => {
@@ -89,25 +94,71 @@ describe("initState", () => {
 })
 
 describe("States", () => {
+  beforeAll(()=>{
+    Reset()
   
-  State({
-    dir: "src",
-    initial: {
-      root: "root"
-    }
-  })
+    State({
+      dir: "src",
+      initial: {
+        root: "root"
+      }
+    })
   
-  State({
-    dir: "src/user",
-    initial: {
-      name: "tony"
-    }
+    State({
+      dir: "src/user",
+      initial: {
+        name: "tony"
+      }
+    })
   })
   
   test("test states exists", () => {
-    expect(States.length).toBeGreaterThanOrEqual(2)
+    expect(States.length).toEqual(2)
   })
   
   
+  
 })
+
+describe("CreateRootReducer", () => {
+  let globalReduer
+  beforeAll(()=>{
+    Reset()
+  
+    State({
+      dir: "src",
+      initial: {
+        root: "root"
+      },
+      actions:{
+        change(state,payload){
+          return {
+            ...state,
+            root:"newRoot"
+          }
+        }
+      }
+    })
+  
+    State({
+      dir: "src/user",
+      initial: {
+        name: "tony"
+      }
+    })
+  
+    globalReduer = CreateRootReducer()
+  })
+  
+  
+  
+  test("test root reducer", () => {
+    expect(globalReduer(initState,{type:"change"})).toEqual({...initState,root:"newRoot"})
+  })
+  
+  
+  
+})
+
+
 

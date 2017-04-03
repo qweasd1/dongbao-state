@@ -3,6 +3,8 @@
  */
 'use strict'
 import {deepset} from './utils';
+import {combineStateReduer} from './combineStateReducer'
+
 
 
 export let Actions = {}
@@ -38,4 +40,13 @@ export let addLocalActions = ( localActions, actionReduers) => {
   States.push(actionReduers)
 }
 
+export let CreateRootReducer = ()=>{
+  return combineStateReduer(States)
+}
 
+// use internally for unit test
+export let Reset = ()=>{
+  Actions = {}
+  States = []
+  initState = {}
+}
