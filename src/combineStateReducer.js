@@ -18,6 +18,12 @@ export let combineStateReduer = (states) => {
   return (state,action)=> {
     let prefix = action.type.substring(0,action.type.lastIndexOf("/"))
     let reducer = prefixReducerMapper[prefix]
+    
+    //if unknown action return orign state
+    if (!reducer) {
+      return state
+    }
+    
     let paths = reducer.$paths
     let previousState = deepget(state, paths)
     let newState = reducer(previousState, action)

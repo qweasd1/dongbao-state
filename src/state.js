@@ -4,7 +4,7 @@
 'use strict'
 
 import {addLocalActions} from './global'
-import {dispatch} from './config'
+import {dispatch,getState} from './config'
 import parsePaths from './path'
 
 
@@ -129,7 +129,7 @@ export let State = (options) => {
     // we wrap the call to finalEffects as a promise (you return promise from effect)
     let effectFn = (payload, error, meta) => {
       // actionDispatcher(payload,error,meta)
-      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, error, meta))
+      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, getState))
     }
     
     // add to local dispatcher
