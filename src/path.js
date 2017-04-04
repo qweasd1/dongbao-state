@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-const FILE_PATH_SPLIT_PATTEN = /[\\\/]/
+export const FILE_PATH_SPLIT_PATTEN = /[\\\/]/
 
 let cache = {}
 

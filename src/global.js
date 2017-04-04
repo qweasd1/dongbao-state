@@ -45,7 +45,7 @@ export let CreateRootReducer = ()=>{
 }
 
 // use internally for unit test
-export let Reset = ()=>{
+export let reset = ()=>{
   Actions = {}
   States = []
   initState = {}

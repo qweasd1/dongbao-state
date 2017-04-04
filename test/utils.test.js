@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-import {deepget, deepset, createDirSelector} from '../src/utils';
+import {deepget, deepset, createDirSelector,createRalativePathSelector} from '../src/utils';
 
 describe("deep get", () => {
   test("simple", () => {
@@ -58,5 +58,47 @@ describe("createDirSelector", () => {
     let selector = createDirSelector("src/user")
     expect(selector({user: "tony"})).toEqual("tony")
   })
+})
+
+
+describe("createRalativePathSelector",()=>{
+  let selector
+  let state = {
+    entries:{
+      people:[{name:"tony"}],
+      products:[]
+    }
+  }
+  
+  test("parse absolute path (only '/')", () => {
+    selector = createRalativePathSelector(["entries","people"],"/")
+    expect(selector(state)).toEqual(state)
+  })
+  
+  test("parse absolute path ('/**')", () => {
+    selector = createRalativePathSelector(["entries","people"],"/entries/people")
+    expect(selector(state)).toEqual(state.entries.people)
+  })
+  
+  test("parse relative path (only '.' ) ", () => {
+    selector = createRalativePathSelector(["entries","people"],".")
+    expect(selector(state)).toEqual(state.entries.people)
+  })
+  
+  test("parse relative path ('./**' ) ", () => {
+    selector = createRalativePathSelector(["entries"],"./people")
+    expect(selector(state)).toEqual(state.entries.people)
+  })
+  
+  test("parse relative path (only '..' ) ", () => {
+    selector = createRalativePathSelector(["entries","people"],"..")
+    expect(selector(state)).toEqual(state.entries)
+  })
+  
+  test("parse relative path ('../**' ) ", () => {
+    selector = createRalativePathSelector(["entries","people"],"../products")
+    expect(selector(state)).toEqual(state.entries.products)
+  })
+  
 })
 

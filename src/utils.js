@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-import parsePaths from './path'
+import parsePaths, {FILE_PATH_SPLIT_PATTEN} from './path'
 
 
 /**
@@ -64,7 +64,58 @@ export function deepset(obj, paths, value) {
  */
 export function createDirSelector(dir) {
   let paths = parsePaths(dir)
-  return (state)=>{
-    return deepget(state,paths)
+  return (state) => {
+    return deepget(state, paths)
+  }
+}
+
+/**
+ * create selector of root state by using relative path
+ * @param paths
+ * @param relativePath
+ * @return {function(*=)}
+ */
+export function createRalativePathSelector(paths, relativePath) {
+  // TODO: we don't include enough error check here, like reach inaccessible path, will add in the future
+  let resolvePaths
+  if (relativePath.startsWith("/")) {
+    resolvePaths = relativePath.split(FILE_PATH_SPLIT_PATTEN).slice(1)
+    
+  }
+  else {
+    resolvePaths = [...paths]
+    
+    let relativePaths = relativePath.split(FILE_PATH_SPLIT_PATTEN)
+    
+    while (relativePaths.length > 0) {
+      let segmenet = relativePaths.shift()
+      if (segmenet === ".") {
+        // do nothing, it's only hint for use relative paths
+        
+      }
+      else if (segmenet === "..") {
+        resolvePaths.pop()
+      }
+      else {
+        resolvePaths.push(segmenet)
+      }
+    }
+  }
+  
+  resolvePaths = resolvePaths.filter(x => x !== "");
+  
+  // use to boost performance when select sub state from root state, only when state change we do a deepget
+  let previousSelectedSubState = undefined
+  let previousRootState = undefined
+  
+  return (state) => {
+    if (state === previousRootState) {
+      return previousSelectedSubState
+    }
+    else {
+      previousSelectedSubState = deepget(state, resolvePaths)
+      previousRootState = state
+      return previousSelectedSubState
+    }
   }
 }

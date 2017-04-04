@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import {Actions, initState, States, CreateRootReducer, Reset} from '../src/global';
+import {Actions, initState, States, CreateRootReducer, reset} from '../src/global';
 import {State} from '../src/state';
 
 
@@ -42,7 +42,7 @@ describe("Actions", () => {
   
   let state
   beforeAll(() => {
-    Reset()
+    reset()
     state = State({
       ...basicState
     })
@@ -62,7 +62,7 @@ describe("Actions", () => {
 describe("initState", () => {
   
   beforeAll(()=>{
-    Reset()
+    reset()
   
     State({
       dir: "src",
@@ -95,7 +95,7 @@ describe("initState", () => {
 
 describe("States", () => {
   beforeAll(()=>{
-    Reset()
+    reset()
   
     State({
       dir: "src",
@@ -123,7 +123,7 @@ describe("States", () => {
 describe("CreateRootReducer", () => {
   let globalReduer
   beforeAll(()=>{
-    Reset()
+    reset()
   
     State({
       dir: "src",
