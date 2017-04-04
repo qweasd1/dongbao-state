@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-import parsePaths, {FILE_PATH_SPLIT_PATTEN} from './path'
+import {FILE_PATH_SPLIT_PATTEN, parsePaths} from './path'
 
 
 /**

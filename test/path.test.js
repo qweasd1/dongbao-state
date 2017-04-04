@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-import parsePaths from '../src/path';
+import {parsePaths} from '../src/path';
 
 
 test("has sub path from src", () => {

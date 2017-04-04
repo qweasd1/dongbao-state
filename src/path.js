@@ -6,7 +6,7 @@ export const FILE_PATH_SPLIT_PATTEN = /[\\\/]/
 
 let cache = {}
 
-export default function parsePaths(dir) {
+export function parsePaths(dir) {
   
   // use cache
   if (cache[dir]) {

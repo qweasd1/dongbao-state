@@ -5,7 +5,7 @@
 
 import {addLocalActions} from './global'
 import {dispatch,getState} from './config'
-import parsePaths from './path'
+import {parsePaths} from './path'
 
 
 function globalActionName(prefix, localName) {

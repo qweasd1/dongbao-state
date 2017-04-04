@@ -6,4 +6,5 @@ export {createDirSelector,createRalativePathSelector,deepget,deepset} from './ut
 export {Config,dispatch,getState} from './config'
 export {combineStateReduer} from './combineStateReducer'
 export {State} from './state'
+export {parsePaths} from './path'
 export {Actions, States, initState, CreateRootReducer} from './global'
