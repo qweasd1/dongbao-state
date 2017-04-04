@@ -76,7 +76,7 @@ export let State = (options) => {
   
   
   for (let localName in localActions) {
-    let actionType = `${action_prefix}/${localName}`
+    let actionType = globalActionName(action_prefix,localName)
     let actionCreator = function (payload, error, meta) {
       return {
         type: actionType,
