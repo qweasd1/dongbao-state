@@ -35,12 +35,12 @@ export let State = (options) => {
   // TODO: workaround for unittest, will use mock for jest in the future
   let _dispatch = options.__dispatch__ || dispatch
   
-  let initialState = options.initial
+  
   
   
   // process plugins: it will modify the options in sequence
   let plugins = options.plugins || []
-  delete options.plugins
+  
   
   // you can return new options in plugins, this will be the new plugins
   // you can also return nothing and modify the origin options, this will pass to the sub sequence
@@ -50,8 +50,8 @@ export let State = (options) => {
       options = result
     }
   }
-  
-  
+  // extract initialState after plugin processing so plugin can change state
+  let initialState = options.initial
   
   let localActions = options.actions
   let globalActions = Object.keys(localActions).reduce((_globalActions, localName) => {
