@@ -4,7 +4,16 @@
 'use strict'
 const FILE_PATH_SPLIT_PATTEN = /[\\\/]/
 
+let cache = {}
+
 export default function parsePaths(dir) {
+  
+  // use cache
+  if (cache[dir]) {
+    return cache[dir]
+  }
+  
+  
   let rawpaths = dir.split(FILE_PATH_SPLIT_PATTEN)
   
   let srcPosition = rawpaths.lastIndexOf("src")
