@@ -6,7 +6,7 @@
 import {State} from '../src/state';
 
 let basicState = {
-  dir: "src/user",
+  path: "src/user",
   initial: {
     name: "tony"
   },

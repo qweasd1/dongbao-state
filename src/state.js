@@ -22,13 +22,9 @@ export let State = (options) => {
   options.actions = options.actions || {}
   options.effects = options.effects || {}
   
-  // check if options is valid
-  if (!options.dir || typeof options.dir !== 'string') {
-    throw new Error(`a string 'dir' is required for a state`)
-  }
   
   // create paths and prefix, add them to options, so plugins can use them
-  let paths = options.paths = parsePaths(options.dir)
+  let paths = options.paths = parsePaths(options.path)
   let action_prefix = options.prefix = paths.join("/")
   
   

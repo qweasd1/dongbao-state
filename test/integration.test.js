@@ -10,7 +10,7 @@ import {createStore} from 'redux';
 
 
 let basicState = {
-  dir: "src/user",
+  path: "src/user",
   initial: {
     name: "tony"
   },

@@ -8,7 +8,7 @@ import {State} from '../src/state';
 
 
 let basicState = {
-  dir: "src/user",
+  path: "src/user",
   initial: {
     name: "tony"
   },
@@ -65,14 +65,14 @@ describe("initState", () => {
     reset()
   
     State({
-      dir: "src",
+      path: "src",
       initial: {
         root: "root"
       }
     })
   
     State({
-      dir: "src/user",
+      path: "src/user",
       initial: {
         name: "tony"
       }
@@ -98,14 +98,14 @@ describe("States", () => {
     reset()
   
     State({
-      dir: "src",
+      path: "src",
       initial: {
         root: "root"
       }
     })
   
     State({
-      dir: "src/user",
+      path: "src/user",
       initial: {
         name: "tony"
       }
@@ -126,7 +126,7 @@ describe("CreateRootReducer", () => {
     reset()
   
     State({
-      dir: "src",
+      path: "src",
       initial: {
         root: "root"
       },
@@ -141,7 +141,7 @@ describe("CreateRootReducer", () => {
     })
   
     State({
-      dir: "src/user",
+      path: "src/user",
       initial: {
         name: "tony"
       }

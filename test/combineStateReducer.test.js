@@ -7,7 +7,7 @@ import {combineStateReduer} from '../src/combineStateReducer'
 
 
 let nestedState = {
-  dir: "src/user",
+  path: "src/user",
   initial: {
     name: "tony"
   },
@@ -37,7 +37,7 @@ let nestedState = {
 }
 
 let rootState = {
-  dir: "src",
+  path: "src",
   initial: {
     root: "root"
   },
