@@ -31,6 +31,9 @@ let basicState = {
     async asyncChangeName(name){
       let newName = await Promise.resolve(name)
       this.changeName(newName)
+    },
+    accessErrorAndMeta(payload,getState,error,meta){
+      return {error,meta}
     }
   }
 }
@@ -162,6 +165,11 @@ describe("effects", () => {
     })
   })
   
+  test("effect access error and meta", async () => {
+    let result = await state.accessErrorAndMeta("payload","error","meta")
+    expect(result.error).toEqual("error")
+    expect(result.meta).toEqual("meta")
+  })
 })
 
 describe("plugins", () => {

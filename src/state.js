@@ -125,7 +125,7 @@ export let State = (options) => {
     // we wrap the call to finalEffects as a promise (you return promise from effect)
     let effectFn = (payload, error, meta) => {
       // actionDispatcher(payload,error,meta)
-      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, getState))
+      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, getState,error,meta))
     }
     
     // add to local dispatcher
