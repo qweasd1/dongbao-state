@@ -12,8 +12,8 @@ let resolvedGetState = warningFn
 export let dispatch = (...args) => {
   return resolvedDispatch(...args)
 }
-export let getState = (...args) => {
-  return resolvedGetState(...args)
+export let getState = () => {
+  return resolvedGetState()
 }
 
 export let Config = (store) => {

@@ -4,6 +4,8 @@
 'use strict'
 
 import {addLocalActions} from './global'
+import {deepget, createRalativePathSelector} from './utils'
+
 import {dispatch,getState} from './config'
 import {parsePaths} from './path'
 
@@ -16,6 +18,8 @@ function globalActionName(prefix, localName) {
     return `${prefix}/${localName}`
   }
 }
+
+
 
 
 export let State = (options) => {
@@ -98,6 +102,14 @@ export let State = (options) => {
     actionReducers[localName] = actionDispatcher
   }
   
+  // create local state getState method
+  let localGetState = ()=>{
+    return deepget(getState(),paths)
+  }
+  
+  localGetState.get = (stateSelector)=>{
+    return createRalativePathSelector(paths,stateSelector)(getState())
+  }
   
   // create effects creator & dispatcher
   let finalEffects = options.effects
@@ -125,7 +137,7 @@ export let State = (options) => {
     // we wrap the call to finalEffects as a promise (you return promise from effect)
     let effectFn = (payload, error, meta) => {
       // actionDispatcher(payload,error,meta)
-      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, getState,error,meta))
+      return Promise.resolve(finalEffects[localName].bind(actionDispatchers)(payload, localGetState,error,meta))
     }
     
     // add to local dispatcher
