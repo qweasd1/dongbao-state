@@ -2,7 +2,7 @@
  * Created by tony on 4/2/17.
  */
 'use strict'
-import {deepget, deepset, createDirSelector,createRalativePathSelector} from '../src/utils';
+import {deepget, deepset, deepmerge, createDirSelector,createRalativePathSelector} from '../src/utils';
 
 describe("deep get", () => {
   test("simple", () => {
@@ -102,3 +102,54 @@ describe("createRalativePathSelector",()=>{
   
 })
 
+describe("deepmerge",()=>{
+  test("paths.length > 0", () => {
+    let obj = {
+      a:{
+        b:1
+      }
+    }
+    
+    expect(deepmerge(obj,["a"],{c:2})).toEqual({
+      a:{
+        b:1,
+        c:2
+      }
+    })
+  })
+  
+  test("paths.length == 0", () => {
+    let obj = {
+      a:{
+        b:1
+      }
+    }
+    
+    expect(deepmerge(obj,[],{c:2})).toEqual({
+      a:{
+        b:1,
+        
+      },
+      c:2
+    })
+  })
+  
+  test("merge none obj value", () => {
+    let obj = {
+      a:{
+        b:1
+      }
+    }
+    
+    expect(deepmerge(obj,["c"],2)).toEqual({
+      a:{
+        b:1,
+      },
+      c:2
+    })
+  })
+  
+  test("merge none obj value at root is forbidden", () => {
+    // TODO: add in future
+  })
+})

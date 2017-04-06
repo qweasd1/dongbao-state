@@ -58,6 +58,58 @@ export function deepset(obj, paths, value) {
 }
 
 /**
+ * deep merge property of obj to given paths, if obj is not object, will set the value instead
+ * @param obj
+ * @param paths
+ * @param value
+ * @return {*}
+ */
+export function deepmerge(obj, paths, value) {
+  
+  let i = 0, _obj = obj, attr
+  for (; i < paths.length - 1; i++) {
+    attr = _obj[paths[i]]
+    if (typeof attr !== 'object') {
+      if (attr === undefined || attr === null) {
+        //TODO: here we have some performance penalty (turn this to a for loop to boost performance)
+        _obj = _obj[paths[i]] = {}
+      }
+      else {
+        throw new Error(`can't deep set obj:${JSON.stringify(obj, null, 2)} for path:${paths.join(".")}`)
+      }
+    }
+    else {
+      _obj = attr
+    }
+  }
+  
+  // TODO: we need to add more check here to avoid assign value directly to root state which is illegal
+  let previousValue, lastPath
+  if (paths.length > 0) {
+    lastPath = paths[i]
+    previousValue = _obj[lastPath]
+  }
+  else {
+    previousValue = _obj
+  }
+  
+  let previousValueType = typeof previousValue
+  let valueType = typeof value
+  
+  if (valueType === "object" && previousValueType === "object") {
+    
+    for (let key in value) {
+      previousValue[key] = value[key]
+    }
+  }
+  else {
+    _obj[lastPath] = value
+  }
+  
+  return _obj
+}
+
+/**
  * create selector of state from dir, will be used when binding state to react Component
  * @param dir {string}
  * @return {function(*)}
