@@ -3,10 +3,10 @@
  */
 'use strict'
 import {State} from '../src/state';
-import {combineStateReduer} from '../src/combineStateReducer'
+import {RootReducer} from '../src/global'
 
 
-let nestedState = {
+let nestedState = State({
   path: "src/user",
   initial: {
     name: "tony"
@@ -34,9 +34,9 @@ let nestedState = {
       this.changeName(newName)
     }
   }
-}
+})
 
-let rootState = {
+let rootState = State({
   path: "src",
   initial: {
     root: "root"
@@ -49,14 +49,14 @@ let rootState = {
       }
     }
   }
-}
+})
 
 
 describe("create", () => {
   
-  let prefixStateMapper, reducer
+  let reducer
   beforeAll(() => {
-    reducer = combineStateReduer([State(nestedState),State(rootState)])
+    reducer = RootReducer
   })
   
   

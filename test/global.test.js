@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import {Actions, initState, States, CreateRootReducer, reset} from '../src/global';
+import {Actions, initState, States, reset, RootReducer} from '../src/global';
 import {State} from '../src/state';
 
 
@@ -147,7 +147,7 @@ describe("CreateRootReducer", () => {
       }
     })
   
-    globalReduer = CreateRootReducer()
+    globalReduer = RootReducer
   })
   
   

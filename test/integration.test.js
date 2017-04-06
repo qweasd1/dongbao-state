@@ -6,7 +6,7 @@
 import {State} from '../src/state';
 import {Config} from '../src/config';
 import {createStore} from 'redux';
-import {initState,CreateRootReducer} from '../src/global'
+import {initState,RootReducer} from '../src/global'
 
 
 
@@ -50,7 +50,7 @@ beforeAll(() => {
   state = State({
     ...basicState
   })
-  store = createStore(CreateRootReducer(),initState)
+  store = createStore(RootReducer)
   Config(store)
 })
 
