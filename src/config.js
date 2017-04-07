@@ -3,6 +3,9 @@
  */
 'use strict'
 
+import {storeCreated} from './global'
+
+
 const warningFn = () => {
   console.warn(`It looks like you're trying to use Dongbao without the middleware! For Dongbao to work, you need to run CreateDongbaoMiddleware() and apply it as middleware to your Redux Store.`)
 }
@@ -19,5 +22,6 @@ export let getState = () => {
 export let Config = (store) => {
   resolvedDispatch = store.dispatch
   resolvedGetState = store.getState
+  storeCreated()
 }
 

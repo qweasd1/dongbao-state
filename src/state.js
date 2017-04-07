@@ -3,7 +3,7 @@
  */
 'use strict'
 
-import {addLocalActions} from './global'
+import {addLocalReducers} from './global'
 import {deepget, createRalativePathSelector} from './utils'
 
 import {dispatch,getState} from './config'
@@ -20,9 +20,7 @@ function globalActionName(prefix, localName) {
 }
 
 
-
-
-export let State = (options) => {
+let createSingleReducer = (options) => {
   options.actions = options.actions || {}
   options.effects = options.effects || {}
   
@@ -115,20 +113,6 @@ export let State = (options) => {
   let finalEffects = options.effects
   for (let localName in finalEffects) {
     let actionType = globalActionName(action_prefix,localName)
-    // let actionCreator = function (payload, error, meta) {
-    //   return {
-    //     type: actionType,
-    //     payload: payload,
-    //     error: error,
-    //     meta: meta
-    //   }
-    // }
-    //
-    // let actionDispatcher = function (payload, error, meta) {
-    //   _dispatch(actionCreator(payload, error, meta))
-    // }
-    //
-    
     
     if (localName in actionDispatchers) {
       throw new Error(`duplicate effect name: ${localName} for state ${action_prefix}`)
@@ -152,16 +136,31 @@ export let State = (options) => {
   actionReducers.$prefix = action_prefix
   actionReducers.$paths = paths
   actionReducers.$initialState = initialState
-  
-  // add to global actions
-  addLocalActions(actionDispatchers, actionReducers)
-  
- 
+  actionReducers.$actionDispatchers = actionDispatchers
   
   return actionReducers
   
 }
 
+
+export let State = (stateConfigs)=>{
+  if (!Array.isArray(stateConfigs)) {
+    stateConfigs = [stateConfigs]
+  }
+  
+  let reducers = stateConfigs.map(createSingleReducer)
+  // add to global reducers
+  addLocalReducers(reducers)
+  
+  if (reducers.length === 1) {
+    return reducers[0]
+  }
+  else {
+    return reducers
+  }
+}
+  
+  
 
 
 

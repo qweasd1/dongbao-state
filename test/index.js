@@ -3,5 +3,7 @@
  */
 'use strict'
 let dongbao = require('../src/index')
+let {calcNextRootStateFromLocalState} = require('../src/global')
 
-console.log(dongbao);
+calcNextRootStateFromLocalState({c:1}, {}, ["a","b"])
+console.log(calcNextRootStateFromLocalState({c:1}, {}, ["a","b"]));
