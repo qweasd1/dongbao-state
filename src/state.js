@@ -23,6 +23,7 @@ function globalActionName(prefix, localName) {
 let createSingleReducer = (options) => {
   options.actions = options.actions || {}
   options.effects = options.effects || {}
+  options.methods = options.methods || {}
   
   
   // create paths and prefix, add them to options, so plugins can use them
@@ -131,6 +132,32 @@ let createSingleReducer = (options) => {
     actionReducers[localName] = effectFn
     
   }
+  
+  
+  // create methods
+  let methods = options.methods
+  
+  for (let localName in methods) {
+    let method = methods[localName]
+    let states
+    if (Array.isArray(method)) {
+      states = method.slice(0,method.length-1)
+      method = method[method.length-1]
+    }
+    else {
+      states = ["."]
+    }
+    
+  
+    let stateSelectors = states.map(state=>createRalativePathSelector(paths, state))
+    
+    let methodFn = function (...args) {
+      return method.apply(actionDispatchers,stateSelectors.map(selector=>selector(getState())).concat(args))
+    }
+    actionDispatchers[localName] = methodFn
+    actionReducers[localName] = methodFn
+  }
+  
   
   // compose the final result
   actionReducers.$prefix = action_prefix

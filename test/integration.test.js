@@ -66,6 +66,37 @@ describe("effect getState", () => {
   
 })
 
+
+describe("methods",()=>{
+  let state
+  beforeAll(()=>{
+    
+    state = State({
+      ...basicState,
+      methods:{
+        isNameTony(state){
+          return state.name === "tony"
+        },
+        isNameTonySelect:["..", ".", function (userState, state) {
+          return userState.user.name === "tony" && state.name == "tony"
+        }]
+      }
+    })
+  
+    store = createStore(RootReducer)
+    Config(store)
+  })
+  
+  test("default state", () => {
+    expect(state.isNameTony()).toEqual(true)
+  })
+  
+  test("choose state", () => {
+    expect(state.isNameTonySelect()).toEqual(true)
+  })
+})
+
+
 describe("single reducer", () => {
   beforeAll(() => {
     state = State({
