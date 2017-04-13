@@ -77,9 +77,15 @@ describe("methods",()=>{
         isNameTony(state){
           return state.name === "tony"
         },
-        isNameTonySelect:["..", ".", function (userState, state) {
-          return userState.user.name === "tony" && state.name == "tony"
-        }]
+        isNameTonySelect:{
+          states:[".",".."],
+          method:function (state,userState) {
+            return userState.user.name === "tony" && state.name === "tony"
+          }
+        },
+        useOtherMethod(){
+          return this.isNameTony()
+        }
       }
     })
   
@@ -93,6 +99,10 @@ describe("methods",()=>{
   
   test("choose state", () => {
     expect(state.isNameTonySelect()).toEqual(true)
+  })
+  
+  test("use other functions", () => {
+    expect(state.useOtherMethod()).toEqual(true)
   })
 })
 

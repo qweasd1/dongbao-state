@@ -140,12 +140,15 @@ let createSingleReducer = (options) => {
   for (let localName in methods) {
     let method = methods[localName]
     let states
-    if (Array.isArray(method)) {
-      states = method.slice(0,method.length-1)
-      method = method[method.length-1]
-    }
-    else {
+    if (typeof method === "function") {
       states = ["."]
+    }
+    else if(typeof method === "object") {
+      states = method.states
+      method = method.method
+    }
+    else{
+      throw new Error(`in [${action_prefix}]: method can only be object or function`)
     }
     
   
